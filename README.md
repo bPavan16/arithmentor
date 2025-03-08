@@ -1,4 +1,4 @@
-# ArithMentor - Interactive Math Practice Platform
+# [ArithMentor - Interactive Math Practice Platform] (https://bpavan16.github.io/arithmentor/)
 
 ## 📚 Overview
 
