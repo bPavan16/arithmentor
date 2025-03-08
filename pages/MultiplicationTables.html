@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="en">
+
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Multiplication Tables</title>
+        <link rel="stylesheet"
+            href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap">
+        <style>
+            :root {
+                --primary: #6366f1;
+                --primary-dark: #4f46e5;
+                --secondary: #ec4899;
+                --accent: #8b5cf6;
+                --bg-color: #f8fafc;
+                --card-bg: #ffffff;
+                --text-primary: #1e293b;
+                --text-secondary: #64748b;
+                --border-radius: 12px;
+            }
+
+            * {
+                margin: 0;
+                padding: 0;
+                box-sizing: border-box;
+            }
+
+            body {
+                font-family: 'Poppins', sans-serif;
+                background-color: var(--bg-color);
+                color: var(--text-primary);
+                line-height: 1.6;
+                max-width: 1400px;
+                margin: 0 auto;
+                padding: 1rem;
+                background-image:
+                    radial-gradient(circle at 25px 25px, rgba(99, 102, 241, 0.15) 2%, transparent 0%),
+                    radial-gradient(circle at 75px 75px, rgba(236, 72, 153, 0.15) 2%, transparent 0%);
+                background-size: 100px 100px;
+            }
+
+            .header {
+                text-align: center;
+                margin-bottom: 2rem;
+                position: relative;
+                padding-top: 1.5rem;
+                position: sticky;
+                top: 0;
+                background-color: var(--bg-color);
+                z-index: 10;
+                padding-bottom: 1rem;
+                background-image:
+                    radial-gradient(circle at 25px 25px, rgba(99, 102, 241, 0.15) 2%, transparent 0%),
+                    radial-gradient(circle at 75px 75px, rgba(236, 72, 153, 0.15) 2%, transparent 0%);
+                background-size: 100px 100px;
+            }
+
+            .header::after {
+                content: "";
+                display: block;
+                width: 80px;
+                height: 4px;
+                background: linear-gradient(to right, var(--primary), var(--secondary));
+                margin: 0.5rem auto 0;
+                border-radius: 2px;
+            }
+
+            h1 {
+                font-size: 2.5rem;
+                font-weight: 700;
+                color: var(--primary);
+                letter-spacing: -0.5px;
+                margin-bottom: 0.5rem;
+                position: relative;
+                display: inline-block;
+            }
+
+            h1::before,
+            h1::after {
+                content: "✦";
+                font-size: 1.5rem;
+                position: absolute;
+                top: 50%;
+                transform: translateY(-50%);
+                color: var(--secondary);
+                opacity: 0.6;
+            }
+
+            h1::before {
+                left: -2rem;
+            }
+
+            h1::after {
+                right: -2rem;
+            }
+
+            .tables-container {
+                display: grid;
+                grid-template-columns: repeat(5, 1fr);
+                gap: 2rem;
+                margin-bottom: 2.5rem;
+            }
+
+            .table {
+                background-color: var(--card-bg);
+                border-radius: var(--border-radius);
+                box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+                padding: 1.5rem;
+                transition: transform 0.3s ease, box-shadow 0.3s ease;
+                position: relative;
+                overflow: hidden;
+                border: 1px solid rgba(99, 102, 241, 0.1);
+            }
+
+            .table::before {
+                content: "";
+                position: absolute;
+                top: 0;
+                left: 0;
+                right: 0;
+                height: 4px;
+                background: linear-gradient(to right, var(--primary), var(--accent));
+            }
+
+            .table:hover {
+                transform: translateY(-5px);
+                box-shadow: 0 15px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+            }
+
+            .table h2 {
+                text-align: center;
+                color: var(--primary);
+                font-weight: 600;
+                margin-bottom: 1.2rem;
+                font-size: 1.3rem;
+                padding-bottom: 0.75rem;
+                border-bottom: 1px dashed rgba(99, 102, 241, 0.3);
+            }
+
+            .multiplication-row {
+                display: flex;
+                justify-content: space-between;
+                padding: 0.6rem 0;
+                border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+                font-size: 1rem;
+                transition: transform 0.2s ease;
+            }
+
+            .multiplication-row:last-child {
+                border-bottom: none;
+            }
+
+            .multiplication-row:hover {
+                transform: translateX(5px);
+                color: var(--primary);
+            }
+
+            .equation-part {
+                display: inline-block;
+            }
+
+            .num {
+                font-weight: 500;
+                color: var(--primary);
+            }
+
+            .equals {
+                color: var(--secondary);
+                font-weight: 600;
+            }
+
+            .result {
+                font-weight: 600;
+                color: var(--accent);
+            }
+
+            .back-to-top {
+                position: fixed;
+                bottom: 20px;
+                right: 20px;
+                padding: 12px;
+                border-radius: 50%;
+                background: linear-gradient(to right, var(--primary), var(--primary-dark));
+                color: white;
+                border: none;
+                cursor: pointer;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                box-shadow: 0 4px 10px rgba(99, 102, 241, 0.3);
+                opacity: 0;
+                transition: opacity 0.3s, transform 0.3s;
+                z-index: 100;
+                transform: translateY(20px);
+            }
+
+            .back-to-top.visible {
+                opacity: 1;
+                transform: translateY(0);
+            }
+
+            .back-to-top:hover {
+                transform: translateY(-5px);
+            }
+
+            .table-appear {
+                animation: fadeInUp 0.6s ease forwards;
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            @keyframes fadeInUp {
+                to {
+                    opacity: 1;
+                    transform: translateY(0);
+                }
+            }
+
+            @media (max-width: 1200px) {
+                .tables-container {
+                    grid-template-columns: repeat(4, 1fr);
+                }
+            }
+
+            @media (max-width: 992px) {
+                .tables-container {
+                    grid-template-columns: repeat(3, 1fr);
+                }
+            }
+
+            @media (max-width: 768px) {
+                body {
+                    padding: 1.5rem;
+                }
+
+                h1 {
+                    font-size: 2rem;
+                }
+
+                h1::before,
+                h1::after {
+                    display: none;
+                }
+
+                .tables-container {
+                    grid-template-columns: repeat(2, 1fr);
+                    gap: 1.5rem;
+                }
+            }
+
+            @media (max-width: 480px) {
+                body {
+                    padding: 1rem;
+                }
+
+                .tables-container {
+                    grid-template-columns: 1fr;
+                }
+
+                .table {
+                    padding: 1rem;
+                }
+            }
+        </style>
+    </head>
+
+    <body>
+        <div class="header">
+            <h1>Multiplication Tables</h1>
+        </div>
+
+        <div class="tables-container" id="tablesContainer"></div>
+
+        <button id="backToTopBtn" class="back-to-top" onclick="scrollToTop()">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M18 15l-6-6-6 6" />
+            </svg>
+        </button>
+
+        <script>
+
+            // Configuration
+
+            const startTable = 1;
+            const endTable = 100;
+
+            // DOM Elements
+            const tablesContainer = document.getElementById('tablesContainer');
+            const backToTopBtn = document.getElementById('backToTopBtn');
+
+            // Generate multiplication table for a given number
+            function generateTable(num, index) {
+                const tableDiv = document.createElement('div');
+                tableDiv.className = 'table table-appear';
+                tableDiv.style.animationDelay = `${Math.min(index * 0.05, 1)}s`;
+
+                const tableTitle = document.createElement('h2');
+                tableTitle.textContent = `Table of ${num}`;
+                tableDiv.appendChild(tableTitle);
+
+                // Generate rows from 9 down to 1 (reverse order)
+                for (let i = 9; i >= 1; i--) {
+                    const row = document.createElement('div');
+                    row.className = 'multiplication-row';
+
+                    // Use HTML elements with classes for better styling
+                    row.innerHTML = `
+                    <span class="equation-part"><span class="num">${num}</span> × <span class="num">${i}</span></span>
+                    <span class="equation-part"><span class="equals">=</span> <span class="result">${num * i}</span></span>
+                `;
+
+                    tableDiv.appendChild(row);
+                }
+
+                return tableDiv;
+            }
+
+            // Render all tables
+            function renderTables() {
+                let index = 0;
+                for (let i = startTable; i <= endTable; i++) {
+                    const table = generateTable(i, index);
+                    tablesContainer.appendChild(table);
+                    index++;
+                }
+            }
+
+            // Show/hide back to top button based on scroll position
+            window.addEventListener('scroll', function () {
+                if (window.pageYOffset > 300) {
+                    backToTopBtn.classList.add('visible');
+                } else {
+                    backToTopBtn.classList.remove('visible');
+                }
+            });
+
+            // Scroll to top function
+            function scrollToTop() {
+                window.scrollTo({
+                    top: 0,
+                    behavior: 'smooth'
+                });
+            }
+
+            // Initial render
+            document.addEventListener('DOMContentLoaded', renderTables);
+        </script>
+    </body>
+
+</html>

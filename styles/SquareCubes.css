@@ -1,0 +1,277 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+
+:root {
+    --primary-color: #4361ee;
+    --primary-light: #4895ef;
+    --secondary-color: #3f37c9;
+    --accent-color: #4cc9f0;
+    --background-color: #f8f9fa;
+    --surface-color: #ffffff;
+    --text-primary: #2b2d42;
+    --text-secondary: #6c757d;
+    --border-color: #e9ecef;
+    --success-color: #4caf50;
+    --hover-color: #f0f7ff;
+    --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.05);
+    --shadow-md: 0 5px 15px rgba(0, 0, 0, 0.1);
+    --border-radius: 12px;
+    --transition: all 0.3s ease;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Poppins', sans-serif;
+    background-color: var(--background-color);
+    color: var(--text-primary);
+    line-height: 1.6;
+    padding: 20px;
+    background-image:
+        radial-gradient(circle at 100px 100px, rgba(67, 97, 238, 0.07) 12px, transparent 2px),
+        radial-gradient(circle at 200px 200px, rgba(76, 201, 240, 0.07) 12px, transparent 2px);
+    background-size: 300px 300px;
+}
+
+.container {
+    max-width: 700px;
+    margin: 0 auto;
+    padding: 40px 20px;
+    background-color: var(--surface-color);
+    border-radius: var(--border-radius);
+    box-shadow: var(--shadow-md);
+    border: 1px solid var(--border-color);
+}
+
+h1 {
+    text-align: center;
+    margin-bottom: 30px;
+    font-weight: 700;
+    color: var(--primary-color);
+    font-size: 2.2rem;
+    position: relative;
+    padding-bottom: 15px;
+}
+
+h1::after {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100px;
+    height: 4px;
+    background: linear-gradient(to right, var(--primary-color), var(--accent-color));
+    border-radius: 2px;
+}
+
+table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    margin-bottom: 30px;
+    table-layout: fixed;
+}
+
+thead {
+    background: linear-gradient(to right, var(--primary-color), var(--primary-light));
+    color: white;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+}
+
+th {
+    padding: 16px 15px;
+    font-weight: 600;
+    text-align: left;
+    text-transform: uppercase;
+    font-size: 0.9rem;
+    letter-spacing: 0.5px;
+}
+
+th:first-child {
+    border-top-left-radius: 8px;
+}
+
+th:last-child {
+    border-top-right-radius: 8px;
+}
+
+tbody tr {
+    transition: var(--transition);
+    border-bottom: 1px solid var(--border-color);
+}
+
+tbody tr:hover {
+    background-color: var(--hover-color);
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-sm);
+}
+
+tbody tr:nth-child(odd) {
+    background-color: rgba(67, 97, 238, 0.03);
+}
+
+tbody tr:nth-child(odd):hover {
+    background-color: var(--hover-color);
+}
+
+td {
+    padding: 16px 15px;
+    border-bottom: 1px solid var(--border-color);
+    font-weight: 400;
+}
+
+td:first-child {
+    font-weight: 600;
+    color: var(--secondary-color);
+}
+
+/* Different background shades for square and cube cells */
+td:nth-child(2) {
+    color: #2c5282;
+    /* Darker blue for squares */
+    background-color: rgba(76, 201, 240, 0.05);
+}
+
+td:nth-child(3) {
+    color: #44337a;
+    /* Purple for cubes */
+    background-color: rgba(63, 55, 201, 0.05);
+}
+
+.pagination {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    margin-top: 30px;
+}
+
+button {
+    padding: 12px 25px;
+    background: linear-gradient(to right, var(--primary-color), var(--primary-light));
+    color: white;
+    border: none;
+    border-radius: 50px;
+    cursor: pointer;
+    font-family: 'Poppins', sans-serif;
+    font-weight: 500;
+    font-size: 1rem;
+    transition: var(--transition);
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
+}
+
+button:hover:not(:disabled) {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 12px rgba(0, 0, 0, 0.15);
+}
+
+button:active:not(:disabled) {
+    transform: translateY(0);
+}
+
+button:disabled {
+    background: linear-gradient(to right, #a0a0a0, #c0c0c0);
+    cursor: not-allowed;
+    opacity: 0.7;
+}
+
+/* Animations */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+tbody tr {
+    animation: fadeIn 0.3s ease-in-out forwards;
+    opacity: 0;
+}
+
+/* Add staggered delay to rows for nice loading effect */
+tbody tr:nth-child(1) {
+    animation-delay: 0.05s;
+}
+
+tbody tr:nth-child(2) {
+    animation-delay: 0.1s;
+}
+
+tbody tr:nth-child(3) {
+    animation-delay: 0.15s;
+}
+
+tbody tr:nth-child(4) {
+    animation-delay: 0.2s;
+}
+
+tbody tr:nth-child(5) {
+    animation-delay: 0.25s;
+}
+
+tbody tr:nth-child(6) {
+    animation-delay: 0.3s;
+}
+
+tbody tr:nth-child(7) {
+    animation-delay: 0.35s;
+}
+
+tbody tr:nth-child(8) {
+    animation-delay: 0.4s;
+}
+
+tbody tr:nth-child(9) {
+    animation-delay: 0.45s;
+}
+
+tbody tr:nth-child(10) {
+    animation-delay: 0.5s;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+    .container {
+        padding: 20px 10px;
+    }
+
+    h1 {
+        font-size: 1.8rem;
+    }
+
+    table {
+        font-size: 0.9rem;
+    }
+
+    th,
+    td {
+        padding: 12px 10px;
+    }
+
+    button {
+        padding: 10px 20px;
+        font-size: 0.9rem;
+    }
+}
+
+@media (max-width: 480px) {
+    h1 {
+        font-size: 1.5rem;
+    }
+
+    th,
+    td {
+        padding: 10px 8px;
+        font-size: 0.85rem;
+    }
+}
