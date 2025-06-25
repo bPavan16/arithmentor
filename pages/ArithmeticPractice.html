@@ -374,7 +374,7 @@
                 </div>
 
                 <div class="question" id="question"></div>
-                <div class="answer" id="answer">= <span id="answerValue"></span></div>
+                <div class="answer" id="answer"><span id="answerValue"></span></div>
 
                 <div class="actions">
                     <button id="nextBtn" class="btn btn-primary next-btn">Next Question</button>
@@ -417,7 +417,9 @@ let score = 0;
 let timerDuration = 10;
 let currentAnswer = 0;
 let timerInterval;
+let autoNextTimeout;
 let selectedDigits = 3; // Default to 3 digits
+let questionId = 0; // Unique ID for each question
 
 //------------------------- Event listeners-------------------------------
 startBtn.addEventListener('click', startPractice);
@@ -484,12 +486,23 @@ function startPractice() {
 
 //----------------  Generate a new arithmetic question ----------------------
 function generateQuestion() {
+    // Clear any pending timers to prevent previous answer/auto-next from firing
+    if (timerInterval) {
+        clearTimeout(timerInterval);
+        timerInterval = null;
+    }
+    if (autoNextTimeout) {
+        clearTimeout(autoNextTimeout);
+        autoNextTimeout = null;
+    }
     // Clear previous answer display
     answerEl.classList.remove('show');
     nextBtn.style.display = 'none';
 
-    // Increment question counter
+    // Increment question counter and questionId
     currentQuestion++;
+    questionId++;
+    const thisQuestionId = questionId;
     updateProgress();
 
     // Get settings
@@ -696,53 +709,57 @@ function generateQuestion() {
 
     // Display the question
     questionEl.textContent = `${num1} ${operationSymbol} ${num2}`;
-    answerValueEl.textContent = currentAnswer;
 
     // Start the timer
-    startTimer();
+    startTimer(thisQuestionId);
+    answerValueEl.textContent = '';
 }
 
-// Start the countdown timer
-function startTimer() {
+function startTimer(thisQuestionId) {
     // Reset timer bar
     timerBar.style.transition = 'none';
     timerBar.style.transform = 'scaleX(1)';
-
-    // Force reflow
     void timerBar.offsetWidth;
-
-    // Start animation
     timerBar.style.transition = `transform ${timerDuration}s linear`;
     timerBar.style.transform = 'scaleX(0)';
-
     // Clear any existing timer
     if (timerInterval) clearTimeout(timerInterval);
-
-    // Set timeout to show answer
-    timerInterval = setTimeout(showAnswer, timerDuration * 1000);
+    timerInterval = setTimeout(() => showAnswer(thisQuestionId), timerDuration * 1000);
 }
 
-// Show the answer after timer expires
-function showAnswer() {
+function showAnswer(thisQuestionId) {
+    if (thisQuestionId !== questionId) return;
+    answerValueEl.textContent = currentAnswer;
     answerEl.classList.add('show');
     nextBtn.style.display = 'block';
 
-    // If this was the last question, show final score
     if (currentQuestion >= totalQuestions) {
         nextBtn.textContent = 'See Final Score';
     }
 
-    // Move to the next question after a delay of 3 seconds
-    setTimeout(nextQuestion, 2000);
+    if (currentQuestion < totalQuestions) {
+        autoNextTimeout = setTimeout(() => {
+            if (answerEl.classList.contains('show') && questionCard.style.display !== 'none') {
+                nextQuestion();
+            }
+        }, 2000);
+    }
 }
 
-// Move to the next question
+
 function nextQuestion() {
+    // Clear any pending timers
+    if (timerInterval) {
+        clearTimeout(timerInterval);
+        timerInterval = null;
+    }
+    if (autoNextTimeout) {
+        clearTimeout(autoNextTimeout);
+        autoNextTimeout = null;
+    }
     if (currentQuestion >= totalQuestions) {
-        // Practice session complete
         showFinalScore();
     } else {
-        // Generate the next question
         generateQuestion();
     }
 }
